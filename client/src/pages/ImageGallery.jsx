@@ -16,7 +16,7 @@ const ImageGallery = () => {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    getImages(); // Fetch images when the component loads
+    getImages(); 
   }, [getImages]);
 
   const handleInputChange = (e) => {
@@ -30,7 +30,6 @@ const ImageGallery = () => {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      // Create preview URL for the selected image
       const url = URL.createObjectURL(file);
       setPreviewUrl(url);
       
