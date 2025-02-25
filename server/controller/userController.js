@@ -1,6 +1,6 @@
 import userModel from "../modele/userModel.js";
 import img from "../modele/imgModel.js";
-
+import { StatusCodes } from "http-status-codes";
 export const getUser = async(req, res) =>{
     try {
         const {userId} = req.body;
@@ -17,6 +17,28 @@ export const getUser = async(req, res) =>{
         });
     } catch (error) {
         return res.json({success:false,message:error.message})
+    }
+}
+// get current user
+export const getCurrentUser = async (req, res) => {
+    const user = await userModel.findOne({ _id: req.body.userId });
+    const userWithoutPassword = user.toJSON();
+    res.status(StatusCodes.OK).json({ user: userWithoutPassword });
+  };
+// update user
+export const updateUser = async (req, res) => {
+    try {
+        const { userId, name,phone,district,city, email } = req.body;
+        const user = await userModel.findByIdAndUpdate(userId, { name,phone,district,city, email }, { new: true });
+        if (!user) {
+            return res.status(404).json({ 
+                success: false, 
+                message: 'User not found' 
+            });
+        }
+        res.json({ success: true, userData: user });
+    } catch (error) {
+        return res.json({ success: false, message: error.message });
     }
 }
 

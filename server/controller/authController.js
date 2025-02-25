@@ -5,9 +5,9 @@ import transporter from '../config/nodemailer.js';
 
 // Register User
 export const register = async (req, res) => {
-    const { name, email, password } = req.body;
+    const { name,phone,district,city, email, password } = req.body;
 
-    if (!name || !email || !password) {
+    if (!name || !phone || !district || !city || !email || !password) {
         return res.status(400).json({ success: false, message: 'Missing Details' });
     }
 
@@ -18,7 +18,7 @@ export const register = async (req, res) => {
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
-        const user = new userModel({ name, email, password: hashedPassword });
+        const user = new userModel({ name,phone,district,city, email, password: hashedPassword });
         await user.save();
 
         // Set token in cookies
@@ -264,7 +264,7 @@ export const isAuthenticated = async (req, res) => {
 
     const user = await userModel.findById(userId)
       .select('-password -verifyOtp -verifyOtpExpireAt -resetOtp -resetOtpExpireAt');
-    
+    console.log(user);
     if (!user) {
       return res.status(401).json({
         success: false,

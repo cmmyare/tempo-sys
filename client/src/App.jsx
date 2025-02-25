@@ -17,7 +17,7 @@ import DashboardLayout from './componants/DashboardLayout';
 import ProtectedRoute from './componants/ProtectedRoute';
 import ImageGallery from "./pages/ImageGallery"
 import Footer from './components/Footer';
-
+import UpdateUser from './pages/updateUser';
 function App() {
   const location = useLocation();
   const isLandingPage = location.pathname === '/';
@@ -25,7 +25,8 @@ function App() {
                           location.pathname === '/profile' || 
                           location.pathname === '/tasks' || 
                           location.pathname === '/settings' ||
-                          location.pathname === '/galry';
+                          location.pathname === '/galry' ||
+                          location.pathname === '/update-user';
 
   return (
     <AuthProvider>
@@ -36,7 +37,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Landing />} />
               <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
+              <Route path="/register" element={<Register />} />            
               <Route path="/reset-password" element={<ResetPassword />} />
               
               {/* Dashboard Routes */}
@@ -49,6 +50,7 @@ function App() {
               >
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/profile" element={<Profile />} />
+                <Route path="/update-user" element={<UpdateUser />} />
                 <Route path="/tasks" element={<Tasks />} />
                 <Route path="/settings" element={<Settings />} />
                 <Route path="/galry" element={<ImageGallery />} />

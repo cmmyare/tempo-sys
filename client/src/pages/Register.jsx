@@ -8,6 +8,9 @@ import Input from '../componants/Input';
 const Register = () => {
   const [formData, setFormData] = useState({
     name: '',
+    phone: '',
+    district: '',
+    city: '',
     email: '',
     password: '',
     confirmPassword: ''
@@ -40,6 +43,9 @@ const Register = () => {
     try {
       await register({
         name: formData.name,
+        phone: formData.phone,
+        district: formData.district,
+        city: formData.city,
         email: formData.email,
         password: formData.password
       });
@@ -87,6 +93,33 @@ const Register = () => {
               value={formData.name}
               onChange={handleChange}
               placeholder="Full name"
+            />
+            <Input
+              id="phone"
+              name="phone"
+              type="text"
+              required
+              value={formData.phone}
+              onChange={handleChange}
+              placeholder="you phone number"
+            />
+            <Input
+              id="district"
+              name="district"
+              type="text"
+              required
+              value={formData.district}
+              onChange={handleChange}
+              placeholder="District"
+            />
+            <Input
+              id="city"
+              name="city"
+              type="text"
+              required
+              value={formData.city}
+              onChange={handleChange}
+              placeholder="City"
             />
 
             <Input
