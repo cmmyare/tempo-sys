@@ -4,7 +4,7 @@ import { useTheme } from '../context/ThemeContext';
 import Button from '../componants/Button';
 
 const Profile = () => {
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
   console.log("viefied mayahay", user)
   const { isDarkMode } = useTheme();
   const navigate = useNavigate();

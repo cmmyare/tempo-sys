@@ -5,6 +5,7 @@ import { useTheme } from '../context/ThemeContext';
 import Button from '../componants/Button';
 import Input from '../componants/Input';
 import { toast } from 'react-toastify';
+import axios from "axios";
 const UpdateUser = () => {
   const { user } = useAuth(); // Add setUser from AuthContext
   const { isDarkMode } = useTheme();
@@ -48,46 +49,36 @@ const UpdateUser = () => {
   };
 
   // Handle form submission
-  const handleUpdate = async (e) => {
-    e.preventDefault();
+ const handleUpdate = async (e) => {
+  e.preventDefault();
 
-    try {
-      const updatedData = {
-        name: formData.name,
-        phone: formData.phone,
-        district: formData.district,
-        city: formData.city,
-        email: formData.email,
-        isEmailVerified: user.isEmailVerified, // Preserve email verification status
-      };
+  try {
+    const updatedData = {
+      name: formData.name,
+      phone: formData.phone,
+      district: formData.district,
+      city: formData.city,
+      email: formData.email,
+      isEmailVerified: user.isEmailVerified, // Preserve email verification status
+    };
 
-      // Include password only if it's provided
-      if (formData.password) {
-        updatedData.password = formData.password;
-      }
-
-      const response = await fetch(`/api/user/data/${formData._id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        body: JSON.stringify(updatedData),
-      });
-
-      const result = await response.json();
-
-      if (!response.ok) {
-        throw new Error(result.message || "Failed to update user data");
-      }
-
-     toast.success("User data updated successfully!");
-      navigate("/profile");
-    } catch (error) {
-      console.error("Update error:", error);
-      alert(error.message || "An error occurred while updating user data.");
+    // Include password only if it's provided
+    if (formData.password) {
+      updatedData.password = formData.password;
     }
-  };
+
+    // ✅ Use axios.put WITHOUT Authorization header
+      await axios.put(`/api/user/data/${formData._id}`, updatedData, {
+      withCredentials: true, // ✅ Ensures cookies are sent automatically
+    });
+
+    toast.success("User data updated successfully!");
+    navigate("/profile");
+  } catch (error) {
+    console.error("Update error:", error);
+    toast.error(error.response?.data?.message || "An error occurred while updating user data.");
+  }
+};
 
   return (
     <div className={`min-h-screen ${isDarkMode ? 'bg-gray-900' : 'bg-gradient-to-br from-indigo-100 via-purple-50 to-blue-100'} py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center transition-colors duration-200`}>

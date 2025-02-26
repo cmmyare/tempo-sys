@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import Button from '../componants/Button';
 import Input from '../componants/Input';
-
+import { toast } from 'react-toastify';
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -21,6 +21,7 @@ const Login = () => {
 
     try {
       await login(email, password);
+     toast.success("Successfully login")
       navigate('/dashboard');
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to login');
