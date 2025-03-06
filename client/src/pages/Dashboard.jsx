@@ -133,7 +133,7 @@ const Dashboard = () => {
             <div className="ml-4">
               <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Total Users</p>
               <p className={`text-2xl font-semibold ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}>1,234</p>
-            </div>
+           </div>
           </div>
         </div>
 

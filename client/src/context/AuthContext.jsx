@@ -13,7 +13,7 @@ export const useAuth = () => {
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [images, setImages] = useState([]); // Store images in state
+  const [images, setImages] = useState([]);
 
   useEffect(() => {
     checkAuth();
@@ -22,6 +22,7 @@ export const AuthProvider = ({ children }) => {
   const checkAuth = async () => {
     try {
       const response = await axios.post('/api/auth/is-auth');
+      //console.log("kan miyaa hada: ", response.data,);
       if (response.data.success) {
         setUser(response.data.user);
       } else {
@@ -121,9 +122,9 @@ export const AuthProvider = ({ children }) => {
     verifyEmail,
     sendResetOTP,
     resetPassword,
-    images, // Expose images state
-    getImages, // Expose function to fetch images
-    uploadImage, // Add uploadImage to the context value
+    images, 
+    getImages, 
+    uploadImage, 
   };
 
   return (

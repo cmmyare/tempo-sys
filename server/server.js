@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser';
 import connectDB from './config/mongodb.js';
 import authRoutes from "./routes/authRoutes.js"
 import userRouter from './routes/userRoutes.js';
+import excelRoutes from './routes/excelRoutes.js';
 
 const app = express();
 const port = process.env.PORT || 4000;
@@ -31,6 +32,7 @@ app.get("/", (req, res) => res.send("api working well"));
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRouter);
 app.use("/api/images", userRouter);
+app.use("/api/excel", excelRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

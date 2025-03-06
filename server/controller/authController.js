@@ -338,30 +338,30 @@ export const sendRessetOtp = async (req, res) => {
 export const resetPassrord = async (req, res) => {
     const { email, otp, newPassword } = req.body;
 
-    console.log("Received Request Body:", req.body); // Log entire body
-    console.log("Email:", email, "OTP:", otp, "New Password:", newPassword);
-    console.log("Type Check - Email:", typeof email, "OTP:", typeof otp, "New Password:", typeof newPassword);
+    // console.log("Received Request Body:", req.body); // Log entire body
+    // console.log("Email:", email, "OTP:", otp, "New Password:", newPassword);
+    // console.log("Type Check - Email:", typeof email, "OTP:", typeof otp, "New Password:", typeof newPassword);
 
     if (!email?.trim() || !otp?.trim() || !newPassword?.trim()) {
-        console.log("Validation failed: Missing email, OTP, or new password.");
+        // console.log("Validation failed: Missing email, OTP, or new password.");
         return res.json({ success: false, message: "Email, OTP, and new Password are required." });
     }
 
     try {
         const user = await userModel.findOne({ email: { $regex: new RegExp("^" + email + "$", "i") } });
-        console.log("User found:", user);
+        //console.log("User found:", user);
 
         if (!user) {
             return res.json({ success: false, message: "User not found." });
         }
 
-        console.log("Stored OTP:", user.resetOtp, "Provided OTP:", otp);
+        // console.log("Stored OTP:", user.resetOtp, "Provided OTP:", otp);
 
         if (!user.resetOtp || String(user.resetOtp) !== String(otp)) {
             return res.json({ success: false, message: "Invalid OTP" });
         }
 
-        console.log("OTP Expiry Time:", user.resetOtpExpireAt, "Current Time:", Date.now());
+        //console.log("OTP Expiry Time:", user.resetOtpExpireAt, "Current Time:", Date.now());
 
         if (user.resetOtpExpireAt < Date.now()) {
             return res.json({ success: false, message: "OTP expired" });

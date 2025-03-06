@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useTheme } from '../context/ThemeContext';
 import Button from '../componants/Button';
-
+import * as XLSX from "xlsx";
 const ImageGallery = () => {
   const { getImages, uploadImage, images } = useAuth();
   const { isDarkMode } = useTheme();
@@ -14,7 +14,7 @@ const ImageGallery = () => {
   const [previewUrl, setPreviewUrl] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-
+const [data, setData] = useState([]);
   useEffect(() => {
     getImages(); 
   }, [getImages]);
@@ -67,6 +67,32 @@ const ImageGallery = () => {
       setError(err.message);
     } finally {
       setLoading(false);
+    }
+  };
+  const handleFileUpload = async (e) => {
+    e.preventDefault();
+    const file = e.target.files[0];
+
+    if(!file){
+      alert("Please select a file.");
+      return;
+    }
+    const reader = new FileReader();
+    reader.readAsBinaryString(file);
+    reader.onload = (e) => {
+      try {
+        const binaryData = e.target.result;
+        const workbook = XLSX.read(binaryData, { type: "binary" });
+        const sheetName = workbook.SheetNames[0];
+        const sheet = workbook.Sheets[sheetName];
+        const parsedData = XLSX.utils.sheet_to_json(sheet);
+
+        setData(parsedData);
+        console.log("Parsed Data:", parsedData);
+      } catch (error) {
+        console.error("Error uploading file:", error);
+        return { success: false, message: "Failed to upload file" };
+      }
     }
   };
 
@@ -171,7 +197,51 @@ const ImageGallery = () => {
             </div>
           </div>
         ))}
-        {images.length === 0 && (
+
+<div className="flex flex-col items-center space-y-4 w-full">  
+  {/* File Input */}
+  <input
+    type="file"
+    accept=".xlsx, .xls, .csv"
+    onChange={handleFileUpload}
+    className={`border rounded-md p-2 cursor-pointer transition-all duration-300
+      ${isDarkMode ? 'bg-gray-800 text-gray-400 border-gray-600' : 'bg-white text-gray-600 border-gray-300'}`}
+  />
+
+  {/* Table (Only shows when data is available) */}
+  {data.length > 0 && (
+    <table
+      className={`border w-full max-w-2xl border-collapse transition-all duration-300
+        ${isDarkMode ? 'bg-gray-800 text-gray-400 border-gray-600' : 'bg-white text-gray-600 border-gray-300'}`}
+    >
+      <thead>
+        <tr>
+          {Object.keys(data[0]).map((key) => (
+            <th key={key} className="border p-2 text-left">{key}</th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {data.map((row, index) => (
+          <tr key={index} className="border">
+            {Object.values(row).map((value, idx) => (
+              <td
+                key={idx}
+                className="border p-2 whitespace-pre-wrap"
+              >
+                {value}
+              </td>
+            ))}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  )}
+</div>
+
+
+      
+      {images.length === 0 && (
           <p className={`${isDarkMode ? 'text-gray-400' : 'text-gray-500'} col-span-full text-center py-8`}>
             No images uploaded yet.
           </p>
